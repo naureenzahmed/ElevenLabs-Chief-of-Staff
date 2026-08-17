@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap — Company</title>
+<meta name="description" content="A roadmap timeline for planning work across teams.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <header class="appbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">R</span>
+      <span>Roadmap</span>
+    </div>
+
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" data-tab="roadmap" aria-selected="true">
+        <span class="dot" aria-hidden="true"></span>Roadmap
+      </button>
+      <button class="tab" role="tab" data-tab="operations" aria-selected="false">
+        <span class="dot" aria-hidden="true"></span>Operations
+      </button>
+      <button class="tab" role="tab" data-tab="metrics" aria-selected="false">
+        <span class="dot" aria-hidden="true"></span>Metrics
+      </button>
+    </nav>
+
+    <div class="switcher" id="roadmap-switcher" role="tablist" aria-label="Roadmap view">
+      <button role="tab" data-rview="timeline" aria-selected="true">Timeline</button>
+      <button role="tab" data-rview="list" aria-selected="false">List</button>
+      <button role="tab" data-rview="board" aria-selected="false">Board</button>
+    </div>
+
+    <div class="appbar-right">
+      <button class="icon-btn" id="theme-toggle" title="Switch light / dark" aria-label="Switch light or dark theme">◐</button>
+    </div>
+  </header>
+
+  <section class="goalbar" id="goalbar" aria-label="Company goal"></section>
+
+  <main>
+    <div class="view" id="view-timeline"   role="tabpanel" aria-label="Timeline"></div>
+    <div class="view" id="view-list"       role="tabpanel" aria-label="List"       hidden></div>
+    <div class="view" id="view-board"      role="tabpanel" aria-label="Board"      hidden></div>
+    <div class="view" id="view-operations" role="tabpanel" aria-label="Operations" hidden></div>
+    <div class="view" id="view-metrics"    role="tabpanel" aria-label="Metrics"    hidden></div>
+  </main>
+
+</div>
+
+<script src="data/roadmap.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
