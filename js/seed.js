@@ -374,6 +374,16 @@ function seedRecruitment() {
   ];
 }
 
+function seedDocs() {
+  return [
+    { id: 'docs-logins', title: 'Software Login', entries: [] },
+    { id: 'docs-tmu', title: 'TMU Documentation', entries: [] },
+    { id: 'docs-tofu', title: 'Top-of-Funnel', entries: [] },
+    { id: 'docs-bofu', title: 'Bottom-of-Funnel', entries: [] },
+    { id: 'docs-internal-ops', title: 'Internal Team Ops Documentation', entries: [] },
+  ];
+}
+
 export function seedData() {
   const year = new Date().getFullYear();
   return {
@@ -388,6 +398,7 @@ export function seedData() {
     okrs: seedOkrs(),
     paidConversions: seedPaidConversions(),
     recruitment: seedRecruitment(),
+    docs: seedDocs(),
     tasks: seedTasks(),
   };
 }

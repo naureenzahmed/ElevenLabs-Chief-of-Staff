@@ -386,6 +386,20 @@ table.metrics-table tr.metrics-group-row .team-dot { display: inline-block; marg
 
 .checkbox-row { display: flex; align-items: center; gap: 6px; }
 
+/* ---------- Documentation & SOPs ---------- */
+.doc-card h4 { font-size: 15px; }
+.doc-list { margin-top: 4px; }
+.doc-row {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 9px 0; border-bottom: 1px solid var(--border);
+}
+.doc-row:last-child { border-bottom: none; }
+.doc-row-main { min-width: 0; }
+.doc-title { font-size: 13px; font-weight: 600; color: var(--text); text-decoration: none; }
+a.doc-title:hover { text-decoration: underline; }
+.doc-notes { font-size: 12px; color: var(--text-dim); margin-top: 2px; line-height: 1.5; }
+.doc-row-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
 /* ---------- Deadline calendar ---------- */
 .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .cal-header select {

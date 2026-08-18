@@ -1,4 +1,5 @@
 import { getData, commit } from './store.js';
+import { renderDocumentation } from './pages/documentation.js';
 import { renderRoadmap } from './pages/roadmap.js';
 import { renderOperations } from './pages/operations.js';
 import { renderMetrics } from './pages/metrics.js';
@@ -6,6 +7,7 @@ import { renderPaidConversions } from './pages/paidConversions.js';
 import { renderRecruitment } from './pages/recruitment.js';
 
 const PAGES = {
+  documentation: { label: 'Documentation', render: renderDocumentation },
   roadmap: { label: 'Roadmap', render: renderRoadmap },
   operations: { label: 'Team Management', render: renderOperations },
   metrics: { label: 'Metrics', render: renderMetrics },
