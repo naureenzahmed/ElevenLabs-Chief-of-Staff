@@ -1,23 +1,33 @@
 import { getData, commit } from './store.js';
+import { renderCover } from './pages/cover.js';
 import { renderDocumentation } from './pages/documentation.js';
 import { renderRoadmap } from './pages/roadmap.js';
 import { renderOperations } from './pages/operations.js';
 import { renderMetrics } from './pages/metrics.js';
 import { renderPaidConversions } from './pages/paidConversions.js';
+import { renderInboundLeads } from './pages/inboundLeads.js';
 import { renderRecruitment } from './pages/recruitment.js';
 
 const PAGES = {
+  home: { label: 'Home', render: renderCover },
   documentation: { label: 'Documentation', render: renderDocumentation },
   roadmap: { label: 'Roadmap', render: renderRoadmap },
   operations: { label: 'Team Management', render: renderOperations },
   metrics: { label: 'Metrics', render: renderMetrics },
   paidConversions: { label: 'Paid Conversions', render: renderPaidConversions },
+  inboundLeads: { label: 'Inbound Leads', render: renderInboundLeads },
   recruitment: { label: 'Recruitment', render: renderRecruitment },
 };
 
 function currentRoute() {
   const hash = location.hash.replace('#/', '').split('?')[0];
-  return PAGES[hash] ? hash : 'roadmap';
+  return PAGES[hash] ? hash : 'home';
+}
+
+function currentAnchor() {
+  const qIdx = location.hash.indexOf('?');
+  if (qIdx === -1) return null;
+  return new URLSearchParams(location.hash.slice(qIdx + 1)).get('anchor');
 }
 
 export function rerender() {
@@ -26,6 +36,15 @@ export function rerender() {
   const page = document.getElementById('app-page');
   page.innerHTML = '';
   PAGES[route].render(page);
+
+  const anchor = currentAnchor();
+  if (anchor) {
+    requestAnimationFrame(() => {
+      document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  } else {
+    window.scrollTo(0, 0);
+  }
 }
 
 function renderHeader(route) {
@@ -74,6 +93,6 @@ function escapeAttr(s) {
 
 window.addEventListener('hashchange', rerender);
 window.addEventListener('DOMContentLoaded', () => {
-  if (!location.hash) location.hash = '#/roadmap';
+  if (!location.hash) location.hash = '#/home';
   rerender();
 });

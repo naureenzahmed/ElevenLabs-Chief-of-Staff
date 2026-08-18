@@ -17,7 +17,7 @@ export function renderRoadmap(container) {
   const data = getData();
 
   container.innerHTML = `
-    <div class="goal-banner">
+    <div class="goal-banner" id="roadmap-timeline-section">
       <div class="goal-title-row">
         <div class="goal-icon"><svg fill="currentColor" viewBox="0 0 9.194 14.752" aria-hidden="true"><path d="M0 0h3.079v14.752H0zM6.115 0h3.079v14.752H6.115z"></path></svg></div>
         <div>

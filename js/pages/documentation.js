@@ -44,8 +44,50 @@ export function renderDocumentation(container) {
 }
 
 function renderSection(s) {
+  return s.fields ? renderStructuredSection(s) : renderSimpleSection(s);
+}
+
+/* Sections with a defined field schema (e.g. Software Login, Bottom-of-Funnel) */
+function renderStructuredSection(s) {
   return `
-    <div class="card doc-card">
+    <div class="card doc-card" id="${s.id}">
+      <div class="toolbar" style="margin-bottom:6px;">
+        <h4 style="margin:0;">${escapeHtml(s.title)}</h4>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-ghost" data-add-doc-row="${s.id}" style="padding:4px 8px;">+ Add row</button>
+          <button class="btn btn-ghost btn-danger" data-remove-doc-section="${s.id}" style="padding:4px 8px;">Remove section</button>
+        </div>
+      </div>
+      ${s.entries.length ? `
+        <div class="tracker-scroll">
+          <table class="list-table doc-fields-table">
+            <thead>
+              <tr>
+                ${s.fields.map((f) => `<th>${escapeHtml(f.label)}</th>`).join('')}
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              ${s.entries.map((entry) => `
+                <tr>
+                  ${s.fields.map((f) => `
+                    <td><input type="text" class="cell-input" data-row-id="${entry.id}" data-section-id="${s.id}" data-field="${f.key}" value="${escapeHtml(entry[f.key] || '')}" /></td>
+                  `).join('')}
+                  <td><button class="btn btn-ghost" data-remove-doc-row="${s.id}|${entry.id}" style="padding:3px 7px;">✕</button></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      ` : '<div class="empty-hint">No entries yet.</div>'}
+    </div>
+  `;
+}
+
+/* Simple sections: a list of documents with a title, optional link, and notes */
+function renderSimpleSection(s) {
+  return `
+    <div class="card doc-card" id="${s.id}">
       <div class="toolbar" style="margin-bottom:6px;">
         <h4 style="margin:0;">${escapeHtml(s.title)}</h4>
         <div style="display:flex; gap:6px;">
@@ -79,6 +121,38 @@ function renderSection(s) {
 }
 
 function wireEvents(container, sections) {
+  /* Structured field tables */
+  document.querySelectorAll('[data-add-doc-row]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const section = sections.find((s) => s.id === btn.dataset.addDocRow);
+      const row = { id: uid('docrow') };
+      section.fields.forEach((f) => { row[f.key] = ''; });
+      section.entries.push(row);
+      commit();
+      renderDocumentation(container);
+    });
+  });
+
+  document.querySelectorAll('.doc-fields-table .cell-input').forEach((input) => {
+    input.addEventListener('input', () => {
+      const section = sections.find((s) => s.id === input.dataset.sectionId);
+      const entry = section.entries.find((e) => e.id === input.dataset.rowId);
+      entry[input.dataset.field] = input.value;
+      commit();
+    });
+  });
+
+  document.querySelectorAll('[data-remove-doc-row]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const [sectionId, rowId] = btn.dataset.removeDocRow.split('|');
+      const section = sections.find((s) => s.id === sectionId);
+      section.entries = section.entries.filter((e) => e.id !== rowId);
+      commit();
+      renderDocumentation(container);
+    });
+  });
+
+  /* Simple doc lists */
   document.querySelectorAll('[data-add-doc]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const form = document.getElementById(`add-doc-form-${btn.dataset.addDoc}`);
@@ -141,6 +215,7 @@ function wireEvents(container, sections) {
     });
   });
 
+  /* Shared: remove a whole section */
   document.querySelectorAll('[data-remove-doc-section]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const idx = sections.findIndex((s) => s.id === btn.dataset.removeDocSection);
