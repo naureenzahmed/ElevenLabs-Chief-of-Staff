@@ -1,13 +1,23 @@
 import { seedData } from './seed.js';
 
-const STORAGE_KEY = 'chiefOfStaffData.v1';
+const STORAGE_KEY = 'chiefOfStaffData.v2';
 
 let data = load();
 
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const stored = JSON.parse(raw);
+      const fresh = seedData();
+      // Backfill any keys added to the seed after this data was first saved.
+      let changed = false;
+      for (const key of Object.keys(fresh)) {
+        if (!(key in stored)) { stored[key] = fresh[key]; changed = true; }
+      }
+      if (changed) save(stored);
+      return stored;
+    }
   } catch (e) {
     console.warn('Failed to load stored data, reseeding.', e);
   }
