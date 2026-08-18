@@ -1,5 +1,6 @@
 import { commit } from '../store.js';
 import { uid, escapeHtml } from '../utils.js';
+import { openClubSidebar } from '../clubSidebar.js';
 
 export function renderTrackerPage(container, data, key, opts) {
   const sections = data[key];
@@ -61,12 +62,12 @@ function renderSection(s, weeks) {
       ${s.note ? `<div class="section-desc">${escapeHtml(s.note)}</div>` : ''}
       ${s.entities && s.entities.length ? `
         <div class="entity-list">
-          ${s.entities.map((e) => `
+          ${s.entities.map((e, entityIndex) => `
             <div class="entity-row">
               <div class="entity-name">${escapeHtml(e.name)}</div>
               ${e.note
                 ? `<div class="entity-note">${escapeHtml(e.note)}</div>`
-                : `<div class="entity-org-list">${e.links && e.links.length ? e.links.map((l) => `<span class="entity-org-box">${escapeHtml(l)}</span>`).join('') : '<span class="entity-org-empty">—</span>'}</div>`
+                : `<div class="entity-org-list">${e.links && e.links.length ? e.links.map((l) => `<button type="button" class="entity-org-box" data-open-club="${s.id}|${entityIndex}|${l.id}">${escapeHtml(l.name)}</button>`).join('') : '<span class="entity-org-empty">—</span>'}</div>`
               }
             </div>
           `).join('')}
@@ -123,6 +124,13 @@ function renderMeetingsSummary(s) {
 }
 
 function wireEvents(container, data, key, opts, sections) {
+  document.querySelectorAll('[data-open-club]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const [sectionId, entityIndex, linkId] = btn.dataset.openClub.split('|');
+      openClubSidebar(sections, sectionId, Number(entityIndex), linkId, () => renderTrackerPage(container, data, key, opts));
+    });
+  });
+
   document.querySelectorAll('.tracker-input').forEach((input) => {
     input.addEventListener('input', () => {
       const [sectionId, metricId, weekKey] = input.dataset.metric.split('|');
