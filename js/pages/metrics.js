@@ -40,7 +40,10 @@ export function renderMetrics(container) {
   document.getElementById('add-metric-btn').addEventListener('click', () => {
     const name = prompt('Metric name', 'New metric');
     if (!name) return;
-    data.metrics.push({ id: uid('metric'), name, teamId: data.teams[0]?.id, target: 'Target', values: {} });
+    const teamNames = data.teams.map((t) => t.name).join(' / ');
+    const teamInput = prompt(`Team (${teamNames}), or leave blank for company-wide`, '');
+    const team = data.teams.find((t) => t.name.toLowerCase() === (teamInput || '').trim().toLowerCase());
+    data.metrics.push({ id: uid('metric'), name, teamId: team ? team.id : null, target: 'Target', values: {} });
     commit();
     renderMetrics(container);
   });
@@ -51,6 +54,13 @@ export function renderMetrics(container) {
 
 function renderTable(data, container) {
   const table = document.getElementById('metrics-table');
+  const colCount = 2 + data.months.length;
+
+  const groups = [
+    ...data.teams.map((t) => ({ teamId: t.id, label: `${t.name} metrics`, color: t.color })),
+    { teamId: null, label: 'Company metrics', color: null },
+  ];
+
   table.innerHTML = `
     <thead>
       <tr>
@@ -60,18 +70,30 @@ function renderTable(data, container) {
       </tr>
     </thead>
     <tbody>
-      ${data.metrics.map((metric) => `
-        <tr>
-          <td>${escapeHtml(metric.name)}</td>
-          ${data.months.map((m) => {
-            const v = metric.values[m.key];
-            const cls = m.isProjection ? 'projection' : (m.isCurrent ? 'current-month' : '');
-            const editable = !m.isProjection;
-            return `<td class="${cls} ${editable ? 'editable-cell' : ''}" ${editable ? `data-cell="${metric.id}|${m.key}"` : ''}>${v ?? '—'}</td>`;
-          }).join('')}
-          <td>${escapeHtml(metric.target)}</td>
-        </tr>
-      `).join('')}
+      ${groups.map((g) => {
+        const metrics = data.metrics.filter((m) => (m.teamId || null) === g.teamId);
+        if (!metrics.length) return '';
+        return `
+          <tr class="metrics-group-row">
+            <td colspan="${colCount}">
+              ${g.color ? `<span class="team-dot" style="background:${g.color};"></span>` : ''}
+              ${escapeHtml(g.label)}
+            </td>
+          </tr>
+          ${metrics.map((metric) => `
+            <tr>
+              <td>${escapeHtml(metric.name)}</td>
+              ${data.months.map((m) => {
+                const v = metric.values[m.key];
+                const cls = m.isProjection ? 'projection' : (m.isCurrent ? 'current-month' : '');
+                const editable = !m.isProjection;
+                return `<td class="${cls} ${editable ? 'editable-cell' : ''}" ${editable ? `data-cell="${metric.id}|${m.key}"` : ''}>${v ?? '—'}</td>`;
+              }).join('')}
+              <td>${escapeHtml(metric.target)}</td>
+            </tr>
+          `).join('')}
+        `;
+      }).join('')}
     </tbody>
   `;
 

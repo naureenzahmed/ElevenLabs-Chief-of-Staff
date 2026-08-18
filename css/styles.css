@@ -323,6 +323,12 @@ table.metrics-table td.current-month { color: var(--accent); font-weight: 700; }
 table.metrics-table td.projection { color: var(--text-faint); }
 table.metrics-table td.editable-cell { cursor: pointer; }
 table.metrics-table td.editable-cell:hover { background: var(--bg-raised-2); border-radius: 4px; }
+table.metrics-table tr.metrics-group-row td {
+  text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  font-weight: 700; color: var(--text-faint); background: var(--bg-raised-2);
+  padding: 7px 10px; border-bottom: 1px solid var(--border);
+}
+table.metrics-table tr.metrics-group-row .team-dot { display: inline-block; margin-right: 6px; }
 
 .goal-card { position: relative; }
 .goal-card .goal-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
