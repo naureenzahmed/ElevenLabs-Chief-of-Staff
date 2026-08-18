@@ -1,5 +1,9 @@
 import { addDays, todayISO, uid } from './utils.js';
 
+function mkClubs(names) {
+  return names.map((name) => ({ id: uid('club'), name, goal: '', theyGet: '', weGet: '' }));
+}
+
 export const TEAMS = [
   { id: 'team-a', name: 'Team A', color: '#6c8cff' },
   { id: 'team-b', name: 'Team B', color: '#ef6f6c' },
@@ -268,17 +272,17 @@ function seedRecruitment() {
       id: 'rec-schools',
       title: 'School Partnerships',
       entities: [
-        { name: 'MIT', links: ['MIT Driverless'] },
-        { name: 'Waterloo', links: ['Coop Programs', 'Socratica', 'Design Teams', 'WATonomous', 'WAT.ai'] },
-        { name: 'UBC', links: ['UBC Thunderbots'] },
-        { name: 'UofT', links: ['UTMIST'] },
-        { name: 'McGill', links: ['McGill Ventures', 'McHacks', 'NOBE McGill', 'JEG Consulting', 'Nord Consulting', 'MES'] },
-        { name: 'McMaster', links: ['DeltaHacks', 'McMaster AI Society', 'McMaster Robotics'] },
-        { name: 'TMU', links: ['Hack the 6ix', 'TMU AI'] },
-        { name: 'Simon Fraser', links: ['SFU Surge', 'SFU AI Club'] },
-        { name: 'Western', links: ['Hack Western', 'Ivey FinTech Club'] },
-        { name: 'Queen’s', links: [] },
-        { name: 'Concordia', links: ['ConUHacks', 'Space Concordia', 'District 3'] },
+        { name: 'MIT', links: mkClubs(['MIT Driverless']) },
+        { name: 'Waterloo', links: mkClubs(['Coop Programs', 'Socratica', 'Design Teams', 'WATonomous', 'WAT.ai']) },
+        { name: 'UBC', links: mkClubs(['UBC Thunderbots']) },
+        { name: 'UofT', links: mkClubs(['UTMIST']) },
+        { name: 'McGill', links: mkClubs(['McGill Ventures', 'McHacks', 'NOBE McGill', 'JEG Consulting', 'Nord Consulting', 'MES']) },
+        { name: 'McMaster', links: mkClubs(['DeltaHacks', 'McMaster AI Society', 'McMaster Robotics']) },
+        { name: 'TMU', links: mkClubs(['Hack the 6ix', 'TMU AI']) },
+        { name: 'Simon Fraser', links: mkClubs(['SFU Surge', 'SFU AI Club']) },
+        { name: 'Western', links: mkClubs(['Hack Western', 'Ivey FinTech Club']) },
+        { name: 'Queen’s', links: mkClubs([]) },
+        { name: 'Concordia', links: mkClubs(['ConUHacks', 'Space Concordia', 'District 3']) },
       ],
       metrics: [
         { id: 'm1', label: 'Leads (#)', target: 10, values: {} },
