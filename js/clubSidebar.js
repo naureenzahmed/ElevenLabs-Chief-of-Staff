@@ -1,5 +1,5 @@
 import { commit } from './store.js';
-import { escapeHtml } from './utils.js';
+import { escapeHtml, clamp } from './utils.js';
 
 let onCloseCallback = null;
 
@@ -19,6 +19,10 @@ function render(sections, sectionId, entityIndex, linkId) {
   const club = entity?.links?.find((l) => l.id === linkId);
   const root = document.getElementById('sidebar-root');
   if (!club) { root.innerHTML = ''; return; }
+
+  const current = club.progressCurrent ?? 0;
+  const target = club.progressTarget ?? 100;
+  const pct = clamp(target ? (current / target) * 100 : 0, 0, 100);
 
   root.innerHTML = `
     <div class="sidebar-overlay" id="club-overlay"></div>
@@ -44,6 +48,25 @@ function render(sections, sectionId, entityIndex, linkId) {
           <div class="ts-field-label">What we get out of the partnership</div>
           <textarea id="club-weget" placeholder="Value for us">${escapeHtml(club.weGet || '')}</textarea>
         </div>
+
+        <div class="ts-field">
+          <div class="ts-field-label">Progress</div>
+          <div class="ts-inline">
+            <input type="number" id="club-progress-current" value="${current}" />
+            <input type="number" id="club-progress-target" value="${target}" />
+          </div>
+          <div class="progress-track" style="margin-top:8px;"><div class="progress-fill accent" style="width:${pct}%;"></div></div>
+        </div>
+
+        <div class="ts-field">
+          <div class="ts-field-label">Date of the Event</div>
+          <input type="date" id="club-event-date" value="${club.eventDate || ''}" />
+        </div>
+
+        <div class="ts-field">
+          <div class="ts-field-label">Date for the Partnership</div>
+          <input type="date" id="club-partnership-date" value="${club.partnershipDate || ''}" />
+        </div>
       </div>
     </div>
   `;
@@ -63,4 +86,17 @@ function render(sections, sectionId, entityIndex, linkId) {
   liveField('club-goal', 'goal');
   liveField('club-theyget', 'theyGet');
   liveField('club-weget', 'weGet');
+  liveField('club-event-date', 'eventDate');
+  liveField('club-partnership-date', 'partnershipDate');
+
+  const progressField = (id, key) => {
+    document.getElementById(id).addEventListener('change', (e) => {
+      club[key] = Number(e.target.value) || 0;
+      commit();
+      if (onCloseCallback) onCloseCallback();
+      render(sections, sectionId, entityIndex, linkId);
+    });
+  };
+  progressField('club-progress-current', 'progressCurrent');
+  progressField('club-progress-target', 'progressTarget');
 }

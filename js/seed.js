@@ -1,7 +1,10 @@
 import { addDays, todayISO, uid } from './utils.js';
 
 function mkClubs(names) {
-  return names.map((name) => ({ id: uid('club'), name, goal: '', theyGet: '', weGet: '' }));
+  return names.map((name) => ({
+    id: uid('club'), name, goal: '', theyGet: '', weGet: '',
+    progressCurrent: 0, progressTarget: 100, eventDate: '', partnershipDate: '',
+  }));
 }
 
 export const TEAMS = [
