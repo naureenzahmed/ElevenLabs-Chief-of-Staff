@@ -12,10 +12,10 @@ const PAGES = {
   home: { label: 'Home', render: renderCover },
   documentation: { label: 'Documentation', render: renderDocumentation },
   roadmap: { label: 'Roadmap', render: renderRoadmap },
-  operations: { label: 'Team Management', render: renderOperations },
   metrics: { label: 'Metrics', render: renderMetrics },
   paidConversions: { label: 'Paid Conversions', render: renderPaidConversions },
   inboundLeads: { label: 'Inbound Leads', render: renderInboundLeads },
+  operations: { label: 'Team Management', render: renderOperations },
   recruitment: { label: 'Recruitment', render: renderRecruitment },
 };
 
