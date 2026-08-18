@@ -10,18 +10,36 @@ export function renderTrackerPage(container, data, key, opts) {
       <div class="page-title" style="margin:0;">${escapeHtml(opts.title)}</div>
       <button class="btn btn-primary" id="add-section-btn">+ Section</button>
     </div>
+    <div class="inline-add-form" id="add-section-form" style="display:none;">
+      <input type="text" id="add-section-input" placeholder="Section title" />
+      <button class="btn btn-primary" id="add-section-confirm">Add</button>
+      <button class="btn btn-ghost" id="add-section-cancel">Cancel</button>
+    </div>
     <div id="tracker-sections" class="stack-16"></div>
   `;
 
   document.getElementById('tracker-sections').innerHTML = sections.map((s) => renderSection(s, weeks)).join('');
 
+  const sectionForm = document.getElementById('add-section-form');
+  const sectionInput = document.getElementById('add-section-input');
+
   document.getElementById('add-section-btn').addEventListener('click', () => {
-    const title = prompt('Section title', 'New section');
+    sectionForm.style.display = sectionForm.style.display === 'none' ? 'flex' : 'none';
+    if (sectionForm.style.display === 'flex') sectionInput.focus();
+  });
+  document.getElementById('add-section-cancel').addEventListener('click', () => {
+    sectionForm.style.display = 'none';
+    sectionInput.value = '';
+  });
+  const confirmAddSection = () => {
+    const title = sectionInput.value.trim();
     if (!title) return;
     sections.push({ id: uid('sec'), title, metrics: [] });
     commit();
     renderTrackerPage(container, data, key, opts);
-  });
+  };
+  document.getElementById('add-section-confirm').addEventListener('click', confirmAddSection);
+  sectionInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') confirmAddSection(); });
 
   wireEvents(container, data, key, opts, sections);
 }
@@ -35,13 +53,22 @@ function renderSection(s, weeks) {
     <div class="card tracker-card">
       <div class="toolbar" style="margin-bottom:6px;">
         <h4 style="margin:0;">${escapeHtml(s.title)}</h4>
-        <button class="btn btn-ghost" data-add-metric="${s.id}" style="padding:4px 8px;">+ Add metric</button>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-ghost" data-add-metric="${s.id}" style="padding:4px 8px;">+ Add metric</button>
+          <button class="btn btn-ghost btn-danger" data-remove-section="${s.id}" style="padding:4px 8px;">Remove section</button>
+        </div>
       </div>
       ${s.note ? `<div class="section-desc">${escapeHtml(s.note)}</div>` : ''}
       ${s.entities && s.entities.length ? `
         <div class="entity-list">
           ${s.entities.map((e) => `
-            <div class="entity-row"><b>${escapeHtml(e.name)}</b>${e.links && e.links.length ? `<span class="entity-links"> — ${e.links.map((l) => escapeHtml(l)).join(' · ')}</span>` : ''}</div>
+            <div class="entity-row">
+              <div class="entity-name">${escapeHtml(e.name)}</div>
+              ${e.note
+                ? `<div class="entity-note">${escapeHtml(e.note)}</div>`
+                : `<div class="entity-org-list">${e.links && e.links.length ? e.links.map((l) => `<span class="entity-org-box">${escapeHtml(l)}</span>`).join('') : '<span class="entity-org-empty">—</span>'}</div>`
+              }
+            </div>
           `).join('')}
         </div>
       ` : ''}
@@ -54,6 +81,7 @@ function renderSection(s, weeks) {
                 <th>Notes</th>
                 <th>Target</th>
                 ${weeks.map((w) => `<th class="tracker-week-th ${w.isCurrent ? 'current-week' : ''}">${escapeHtml(w.label)}</th>`).join('')}
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -67,14 +95,31 @@ function renderSection(s, weeks) {
                       <input type="text" inputmode="decimal" class="tracker-input" data-metric="${s.id}|${m.id}|${w.key}" value="${escapeHtml(m.values?.[w.key] ?? '')}" />
                     </td>
                   `).join('')}
+                  <td><button class="btn btn-ghost" data-remove-metric="${s.id}|${m.id}" style="padding:2px 7px;">✕</button></td>
                 </tr>
               `).join('')}
             </tbody>
           </table>
         </div>
       ` : '<div class="empty-hint">No metrics yet.</div>'}
+      ${renderMeetingsSummary(s)}
+      <div class="inline-add-form" id="add-metric-form-${s.id}" style="display:none;">
+        <input type="text" id="add-metric-input-${s.id}" placeholder="Metric name" />
+        <button class="btn btn-primary" data-confirm-add-metric="${s.id}">Add</button>
+        <button class="btn btn-ghost" data-cancel-add-metric="${s.id}">Cancel</button>
+      </div>
     </div>
   `;
+}
+
+function renderMeetingsSummary(s) {
+  const metric = s.metrics?.find((m) => /meeting(s)?\s*booked/i.test(m.label) && !/%/.test(m.label));
+  if (!metric) return '';
+  const total = Object.values(metric.values || {}).reduce((sum, v) => {
+    const n = parseFloat(v);
+    return sum + (Number.isNaN(n) ? 0 : n);
+  }, 0);
+  return `<div class="tracker-summary">Meetings booked <b>${total}</b></div>`;
 }
 
 function wireEvents(container, data, key, opts, sections) {
@@ -92,11 +137,52 @@ function wireEvents(container, data, key, opts, sections) {
 
   document.querySelectorAll('[data-add-metric]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const section = sections.find((s) => s.id === btn.dataset.addMetric);
-      const label = prompt('Metric name', 'New metric');
-      if (!label) return;
-      section.metrics = section.metrics || [];
-      section.metrics.push({ id: uid('m'), label, target: null, values: {} });
+      const form = document.getElementById(`add-metric-form-${btn.dataset.addMetric}`);
+      const input = document.getElementById(`add-metric-input-${btn.dataset.addMetric}`);
+      form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+      if (form.style.display === 'flex') input.focus();
+    });
+  });
+
+  document.querySelectorAll('[data-cancel-add-metric]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.getElementById(`add-metric-form-${btn.dataset.cancelAddMetric}`).style.display = 'none';
+    });
+  });
+
+  const confirmAddMetric = (sectionId) => {
+    const input = document.getElementById(`add-metric-input-${sectionId}`);
+    const label = input.value.trim();
+    if (!label) return;
+    const section = sections.find((s) => s.id === sectionId);
+    section.metrics = section.metrics || [];
+    section.metrics.push({ id: uid('m'), label, target: null, values: {} });
+    commit();
+    renderTrackerPage(container, data, key, opts);
+  };
+  document.querySelectorAll('[data-confirm-add-metric]').forEach((btn) => {
+    btn.addEventListener('click', () => confirmAddMetric(btn.dataset.confirmAddMetric));
+  });
+  document.querySelectorAll('[id^="add-metric-input-"]').forEach((input) => {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') confirmAddMetric(input.id.replace('add-metric-input-', ''));
+    });
+  });
+
+  document.querySelectorAll('[data-remove-metric]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const [sectionId, metricId] = btn.dataset.removeMetric.split('|');
+      const section = sections.find((s) => s.id === sectionId);
+      section.metrics = section.metrics.filter((m) => m.id !== metricId);
+      commit();
+      renderTrackerPage(container, data, key, opts);
+    });
+  });
+
+  document.querySelectorAll('[data-remove-section]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const idx = sections.findIndex((s) => s.id === btn.dataset.removeSection);
+      if (idx >= 0) sections.splice(idx, 1);
       commit();
       renderTrackerPage(container, data, key, opts);
     });

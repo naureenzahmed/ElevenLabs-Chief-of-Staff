@@ -1,6 +1,8 @@
 import { getData, commit, findTeam } from '../store.js';
 import { uid, todayISO, addDays, daysBetween, fmtDate, escapeHtml, initials } from '../utils.js';
 import { openTaskSidebar } from '../taskSidebar.js';
+import { renderOkrSection } from './okr.js';
+import { renderDeadlineCalendar } from './deadlineCalendar.js';
 
 const DAY_PX = 18;
 const DAYS_BEFORE = 21;
@@ -17,10 +19,10 @@ export function renderRoadmap(container) {
   container.innerHTML = `
     <div class="goal-banner">
       <div class="goal-title-row">
-        <div class="goal-icon">🎯</div>
+        <div class="goal-icon"><svg fill="currentColor" viewBox="0 0 9.194 14.752" aria-hidden="true"><path d="M0 0h3.079v14.752H0zM6.115 0h3.079v14.752H6.115z"></path></svg></div>
         <div>
-          <div class="section-label">Company goal</div>
-          <div class="goal-big">${escapeHtml(data.companyGoal.title)}</div>
+          <div class="section-label">Roadmap</div>
+          <div class="goal-big">Road map</div>
         </div>
       </div>
       <div class="goal-days">
@@ -37,6 +39,13 @@ export function renderRoadmap(container) {
     </div>
 
     <div id="roadmap-view"></div>
+
+    <div id="roadmap-okr-section" style="margin-top: 40px;"></div>
+
+    <div style="margin-top: 40px;">
+      <div class="page-title" style="margin-bottom: 12px;">Deadline calendar</div>
+      <div id="roadmap-calendar-section"></div>
+    </div>
   `;
 
   container.querySelectorAll('[data-view]').forEach((btn) => {
@@ -51,6 +60,9 @@ export function renderRoadmap(container) {
   if (currentView === 'timeline') renderTimeline(view, data);
   else if (currentView === 'list') renderList(view, data);
   else renderBoard(view, data);
+
+  renderOkrSection(document.getElementById('roadmap-okr-section'));
+  renderDeadlineCalendar(document.getElementById('roadmap-calendar-section'));
 }
 
 function cap(s) { return s[0].toUpperCase() + s.slice(1); }

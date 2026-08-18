@@ -1,6 +1,5 @@
 import { getData, commit } from './store.js';
 import { renderRoadmap } from './pages/roadmap.js';
-import { renderOkr } from './pages/okr.js';
 import { renderOperations } from './pages/operations.js';
 import { renderMetrics } from './pages/metrics.js';
 import { renderPaidConversions } from './pages/paidConversions.js';
@@ -8,8 +7,7 @@ import { renderRecruitment } from './pages/recruitment.js';
 
 const PAGES = {
   roadmap: { label: 'Roadmap', render: renderRoadmap },
-  okr: { label: 'OKR', render: renderOkr },
-  operations: { label: 'Operations', render: renderOperations },
+  operations: { label: 'Team Management', render: renderOperations },
   metrics: { label: 'Metrics', render: renderMetrics },
   paidConversions: { label: 'Paid Conversions', render: renderPaidConversions },
   recruitment: { label: 'Recruitment', render: renderRecruitment },

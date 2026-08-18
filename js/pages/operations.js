@@ -5,7 +5,7 @@ export function renderOperations(container) {
   const data = getData();
 
   container.innerHTML = `
-    <div class="page-title">Operations</div>
+    <div class="page-title">Team Management</div>
 
     <div class="section-label">Key milestones</div>
     <div class="section-desc">Key dates across every roadmap, in order.</div>

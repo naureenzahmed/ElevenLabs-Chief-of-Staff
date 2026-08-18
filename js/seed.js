@@ -1,4 +1,4 @@
-import { addDays, todayISO } from './utils.js';
+import { addDays, todayISO, uid } from './utils.js';
 
 export const TEAMS = [
   { id: 'team-a', name: 'Team A', color: '#6c8cff' },
@@ -26,6 +26,44 @@ export const INITIATIVES = [
   { id: 'init-2', name: 'Initiative 2', teamId: 'team-b', goalLabel: 'Reach target', current: 0, target: 100, unit: '%' },
   { id: 'init-3', name: 'Initiative 3', teamId: 'team-c', goalLabel: 'Reach target', current: 0, target: 100, unit: '%' },
 ];
+
+const TASK_STATUSES = ['Backlog', 'Ready', 'In progress', 'In design', 'Committed', 'Done'];
+
+function randomInt(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+function seedTasks() {
+  const tasks = [];
+  INITIATIVES.forEach((init) => {
+    const teamPeople = PEOPLE.filter((p) => p.teamId === init.teamId);
+    const count = randomInt(2, 4);
+    for (let i = 1; i <= count; i++) {
+      const startOffset = randomInt(-21, 45);
+      const duration = randomInt(3, 12);
+      const assignee = teamPeople.length ? teamPeople[randomInt(0, teamPeople.length - 1)] : null;
+      tasks.push({
+        id: uid('task'),
+        title: `Task ${i}`,
+        description: 'Example task description — replace with the real scope of work.',
+        impact: 'Example impact statement.',
+        status: TASK_STATUSES[randomInt(0, TASK_STATUSES.length - 1)],
+        assigneeId: assignee ? assignee.id : null,
+        startDate: addDays(todayISO(), startOffset),
+        endDate: addDays(todayISO(), startOffset + duration),
+        designDeadline: '',
+        sectionId: init.id,
+        teamId: init.teamId,
+        client: '',
+        createdBy: 'You',
+        blockedBy: [],
+        subtasks: [],
+        comments: [],
+      });
+    }
+  });
+  return tasks;
+}
 
 function seedMilestones() {
   return [
@@ -81,19 +119,26 @@ function seedMetrics() {
 function seedOkrs() {
   return [
     {
+      id: 'okr-company', objective: 'Company Objective 1', teamId: null,
+      keyResults: [
+        { id: 'kr-co-1', title: 'Key result 1', current: 0, target: 100, deadline: addDays(todayISO(), 90), assigneeIds: [] },
+        { id: 'kr-co-2', title: 'Key result 2', current: 0, target: 100, deadline: addDays(todayISO(), 60), assigneeIds: [] },
+      ],
+    },
+    {
       id: 'okr-1', objective: 'Objective 1', teamId: 'team-a',
       keyResults: [
-        { id: 'kr-1-1', title: 'Key result 1', current: 0, target: 100 },
-        { id: 'kr-1-2', title: 'Key result 2', current: 0, target: 100 },
+        { id: 'kr-1-1', title: 'Key result 1', current: 0, target: 100, deadline: addDays(todayISO(), 30), assigneeIds: ['p1', 'p4'] },
+        { id: 'kr-1-2', title: 'Key result 2', current: 0, target: 100, deadline: addDays(todayISO(), 45), assigneeIds: ['p2'] },
       ],
     },
     {
       id: 'okr-2', objective: 'Objective 2', teamId: 'team-b',
-      keyResults: [{ id: 'kr-2-1', title: 'Key result 1', current: 0, target: 100 }],
+      keyResults: [{ id: 'kr-2-1', title: 'Key result 1', current: 0, target: 100, deadline: addDays(todayISO(), 30), assigneeIds: ['p6', 'p8'] }],
     },
     {
       id: 'okr-3', objective: 'Objective 3', teamId: 'team-c',
-      keyResults: [{ id: 'kr-3-1', title: 'Key result 1', current: 0, target: 100 }],
+      keyResults: [{ id: 'kr-3-1', title: 'Key result 1', current: 0, target: 100, deadline: addDays(todayISO(), 30), assigneeIds: ['p10', 'p12'] }],
     },
   ];
 }
@@ -276,15 +321,15 @@ function seedRecruitment() {
       id: 'rec-partnerships',
       title: 'Partnership Events',
       entities: [
-        { name: 'ElevenLabs', links: ['Recruit same level of talent'] },
-        { name: 'Corgi', links: ['Recruit for people who bring high visibility'] },
-        { name: 'Turbopuffer', links: ['Strong technical talent, able to work under pressure'] },
-        { name: 'Afterquery', links: ['Able to fit the culture'] },
-        { name: 'Cambridge', links: ['New avenues of growth and sales skills'] },
-        { name: 'Physical Intelligence', links: ['Strong technical talent'] },
-        { name: 'The General Intelligence Company', links: ['Strong technical talent in New York, where ElevenLabs has a large office'] },
-        { name: 'NEO', links: ['Strong operator talent'] },
-        { name: 'Kodak Films', links: ['Bring more visibility to the Eleven-verse'] },
+        { name: 'Mecka AI', note: 'Recruit same level of talent' },
+        { name: 'Corgi', note: 'Recruit for people who bring high visibility' },
+        { name: 'Turbopuffer', note: 'Strong technical talent, able to work under pressure' },
+        { name: 'Afterquery', note: 'Able to fit the culture' },
+        { name: 'Cambridge', note: 'New avenues of growth and sales skills' },
+        { name: 'Physical Intelligence', note: 'Strong technical talent' },
+        { name: 'The General Intelligence Company', note: 'Strong technical talent in New York, where ElevenLabs has a large office' },
+        { name: 'NEO', note: 'Strong operator talent' },
+        { name: 'Kodak Films', note: 'Bring more visibility to the Eleven-verse' },
       ],
       metrics: [
         { id: 'm1', label: 'Leads (#)', target: '40 per event', values: {} },
@@ -343,6 +388,6 @@ export function seedData() {
     okrs: seedOkrs(),
     paidConversions: seedPaidConversions(),
     recruitment: seedRecruitment(),
-    tasks: [],
+    tasks: seedTasks(),
   };
 }
