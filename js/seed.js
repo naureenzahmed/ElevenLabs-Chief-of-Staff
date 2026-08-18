@@ -376,12 +376,54 @@ function seedRecruitment() {
 
 function seedDocs() {
   return [
-    { id: 'docs-logins', title: 'Software Login', entries: [] },
+    {
+      id: 'docs-logins', title: 'Software Login',
+      fields: [
+        { key: 'name', label: 'Software Name' },
+        { key: 'loginProcess', label: 'Login Process' },
+        { key: 'adminAccess', label: 'Admin Access' },
+        { key: 'useCases', label: 'Use Cases' },
+      ],
+      entries: [],
+    },
     { id: 'docs-tmu', title: 'TMU Documentation', entries: [] },
-    { id: 'docs-tofu', title: 'Top-of-Funnel', entries: [] },
-    { id: 'docs-bofu', title: 'Bottom-of-Funnel', entries: [] },
-    { id: 'docs-internal-ops', title: 'Internal Team Ops Documentation', entries: [] },
+    {
+      id: 'docs-tofu', title: 'Top-of-Funnel',
+      entries: [
+        { id: 'tofu-1', title: 'Setting up HubSpot sequences', url: '', notes: '' },
+        { id: 'tofu-2', title: 'Setting up HeyReach sequences', url: '', notes: '' },
+        { id: 'tofu-3', title: 'Setting up Google Ads', url: '', notes: '' },
+        { id: 'tofu-4', title: 'Setting up LinkedIn ads', url: '', notes: '' },
+        { id: 'tofu-5', title: 'Setting up Meta ads', url: '', notes: '' },
+      ],
+    },
+    {
+      id: 'docs-bofu', title: 'Bottom-of-Funnel',
+      fields: [
+        { key: 'pricingDoc', label: 'Pricing Doc' },
+        { key: 'title', label: 'Title' },
+        { key: 'implementationStrategy', label: 'Implementation Strategy' },
+      ],
+      entries: [],
+    },
+    {
+      id: 'docs-internal-ops', title: 'Internal Team Ops Documentation',
+      entries: [
+        { id: 'ops-doc-1', title: 'Insurance login process', url: '', notes: '' },
+        { id: 'ops-doc-2', title: 'Expense login process', url: '', notes: '' },
+        { id: 'ops-doc-3', title: 'Onboarding checklist', url: '', notes: '' },
+      ],
+    },
   ];
+}
+
+function seedInboundLeads() {
+  const emptyRow = () => ({
+    id: uid('lead'), company: '', userName: '', source: '', title: '', stage: '',
+    positiveAnswer: '', demoBookedDate: '', demoHappenedDate: '', lostLead: '',
+    meetingWithAeDate: '', estimatedQuantity: '', estimatedRevenue: '', note: '',
+  });
+  return { rows: [emptyRow(), emptyRow(), emptyRow(), emptyRow(), emptyRow()], notes: '' };
 }
 
 export function seedData() {
@@ -399,6 +441,7 @@ export function seedData() {
     paidConversions: seedPaidConversions(),
     recruitment: seedRecruitment(),
     docs: seedDocs(),
+    inboundLeads: seedInboundLeads(),
     tasks: seedTasks(),
   };
 }

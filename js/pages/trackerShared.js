@@ -50,7 +50,7 @@ function renderSection(s, weeks) {
   }
 
   return `
-    <div class="card tracker-card">
+    <div class="card tracker-card" id="${s.id}">
       <div class="toolbar" style="margin-bottom:6px;">
         <h4 style="margin:0;">${escapeHtml(s.title)}</h4>
         <div style="display:flex; gap:6px;">

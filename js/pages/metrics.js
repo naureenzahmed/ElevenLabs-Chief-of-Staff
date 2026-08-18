@@ -17,16 +17,20 @@ export function renderMetrics(container) {
       <div class="progress-track"><div class="progress-fill accent" style="width:${pct}%;"></div></div>
     </div>
 
-    <div class="toolbar">
-      <div class="section-label" style="margin:0;">Monthly log</div>
-      <button class="btn btn-ghost" id="add-metric-btn" style="padding:4px 8px;">+ Add metric</button>
-    </div>
-    <div class="card" style="overflow-x:auto; margin-bottom:24px;">
-      <table class="metrics-table" id="metrics-table"></table>
+    <div id="metrics-log">
+      <div class="toolbar">
+        <div class="section-label" style="margin:0;">Monthly log</div>
+        <button class="btn btn-ghost" id="add-metric-btn" style="padding:4px 8px;">+ Add metric</button>
+      </div>
+      <div class="card" style="overflow-x:auto; margin-bottom:24px;">
+        <table class="metrics-table" id="metrics-table"></table>
+      </div>
     </div>
 
-    <div class="section-label">Tracked goals</div>
-    <div class="grid-3" id="metric-cards"></div>
+    <div id="metrics-cards">
+      <div class="section-label">Tracked goals</div>
+      <div class="grid-3" id="metric-cards"></div>
+    </div>
   `;
 
   document.getElementById('goal-card-top').addEventListener('click', () => {

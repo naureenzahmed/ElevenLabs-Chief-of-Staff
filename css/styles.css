@@ -101,6 +101,7 @@ a { color: inherit; }
 
 /* Page container */
 #app-page { padding: 20px; max-width: 1500px; margin: 0 auto; }
+#app-page [id] { scroll-margin-top: 76px; }
 
 .page-title { font-size: 20px; font-weight: 700; margin: 4px 0 20px; }
 .section-label {
@@ -386,6 +387,22 @@ table.metrics-table tr.metrics-group-row .team-dot { display: inline-block; marg
 
 .checkbox-row { display: flex; align-items: center; gap: 6px; }
 
+/* ---------- Cover page ---------- */
+.cover-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (max-width: 800px) { .cover-grid { grid-template-columns: 1fr; } }
+.cover-page-title {
+  display: block; font-size: 16px; font-weight: 700; color: var(--text);
+  text-decoration: none; margin-bottom: 8px;
+}
+.cover-page-title:hover { text-decoration: underline; }
+.cover-sublist { list-style: none; margin: 0; padding: 0; }
+.cover-sublist li { border-top: 1px solid var(--border); }
+.cover-sublist li:first-child { border-top: none; }
+.cover-sublist a {
+  display: block; padding: 7px 0; font-size: 13px; color: var(--text-dim); text-decoration: none;
+}
+.cover-sublist a:hover { color: var(--text); text-decoration: underline; }
+
 /* ---------- Documentation & SOPs ---------- */
 .doc-card h4 { font-size: 15px; }
 .doc-list { margin-top: 4px; }
@@ -399,6 +416,22 @@ table.metrics-table tr.metrics-group-row .team-dot { display: inline-block; marg
 a.doc-title:hover { text-decoration: underline; }
 .doc-notes { font-size: 12px; color: var(--text-dim); margin-top: 2px; line-height: 1.5; }
 .doc-row-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+.cell-input {
+  width: 100%; min-width: 130px; background: var(--bg-raised-2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 8px; color: var(--text); font-size: 12px; outline: none;
+}
+.cell-input:hover { border-color: #cfcdc9; }
+.cell-input:focus { border-color: #b8b6b2; background: var(--bg); }
+.doc-fields-table th, .doc-fields-table td { white-space: nowrap; }
+
+.leads-table th, .leads-table td { white-space: nowrap; }
+.leads-notes {
+  width: 100%; min-height: 90px; background: var(--bg-raised); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px; color: var(--text); font-size: 13px;
+  outline: none; resize: vertical; font-family: inherit; margin-top: 8px;
+}
+.leads-notes:focus { border-color: #b8b6b2; }
 
 /* ---------- Deadline calendar ---------- */
 .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }

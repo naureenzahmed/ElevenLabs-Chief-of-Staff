@@ -7,23 +7,29 @@ export function renderOperations(container) {
   container.innerHTML = `
     <div class="page-title">Team Management</div>
 
-    <div class="section-label">Key milestones</div>
-    <div class="section-desc">Key dates across every roadmap, in order.</div>
-    <div class="card" style="margin-bottom:24px;">
-      <div id="milestones-list"></div>
-      <button class="btn btn-ghost" id="add-milestone-btn" style="margin-top:8px; padding:4px 8px;">+ Add milestone</button>
+    <div id="ops-milestones">
+      <div class="section-label">Key milestones</div>
+      <div class="section-desc">Key dates across every roadmap, in order.</div>
+      <div class="card" style="margin-bottom:24px;">
+        <div id="milestones-list"></div>
+        <button class="btn btn-ghost" id="add-milestone-btn" style="margin-top:8px; padding:4px 8px;">+ Add milestone</button>
+      </div>
     </div>
 
-    <div class="section-label">Availability</div>
-    <div class="section-desc">Engineers &amp; designers — who's open right now.</div>
-    <div class="card" style="margin-bottom:24px;">
-      <div id="availability-summary"></div>
-      <div id="people-list"></div>
+    <div id="ops-availability">
+      <div class="section-label">Availability</div>
+      <div class="section-desc">Engineers &amp; designers — who's open right now.</div>
+      <div class="card" style="margin-bottom:24px;">
+        <div id="availability-summary"></div>
+        <div id="people-list"></div>
+      </div>
     </div>
 
-    <div class="section-label">Team composition</div>
-    <div class="section-desc">Who's on each team, grouped by role.</div>
-    <div class="grid-3" id="team-grid"></div>
+    <div id="ops-teams">
+      <div class="section-label">Team composition</div>
+      <div class="section-desc">Who's on each team, grouped by role.</div>
+      <div class="grid-3" id="team-grid"></div>
+    </div>
   `;
 
   renderMilestones(data);
