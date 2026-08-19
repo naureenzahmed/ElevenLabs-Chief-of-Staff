@@ -156,14 +156,12 @@ function seedPaidConversions() {
       id: 'pc-intro',
       isIntro: true,
       note: [
-        "Mecka's buyer universe is 150 to 400 accounts globally: foundation model labs, humanoid companies, industrial integrators, a handful of auto and logistics programs. There is 300-400 companies that are a perfect fit.",
         'For lead generation, it doesn’t make great sense to do volume-based queries when there are so few targets. I would rather have a list of accounts and reach out to each individual through email, LinkedIn, conference meeting, and targeted ad, one by one, ensuring that each is covered on all four fronts.',
       ],
     },
     {
       id: 'pc-email',
       title: 'Email Outbound',
-      note: 'This is a campaign to reach out to targets, tracking the funnel from leads and emails sent, to number of replies, to meetings booked. From there, we go more granular into demos, pricing negotiations, and sales.',
       metrics: [
         { id: 'm1', label: 'Number of leads', note: 'Reaching them through their email would be the best, with editorial and case studies.', target: 100, values: {} },
         { id: 'm2', label: 'Number of emails', target: 80, values: {} },
@@ -174,7 +172,6 @@ function seedPaidConversions() {
     {
       id: 'pc-linkedin',
       title: 'Ads - LinkedIn',
-      note: 'These are campaigns on LinkedIn Ads run against specific audience lists, to see whether we are presenting the ad to the right people and whether they are present on LinkedIn. If this channel does not bring a positive CAC, it will be deemed unsuccessful.',
       metrics: [
         { id: 'm1', label: 'Spend', target: 100, values: {} },
         { id: 'm2', label: 'CTR creative 1', target: 100, values: {} },
@@ -189,7 +186,6 @@ function seedPaidConversions() {
     {
       id: 'pc-google',
       title: 'Ads - Google',
-      note: 'These are Google Search ads to make sure we are optimizing for what our ICP is looking for and hitting the right messaging. It needs to produce a positive CAC to be considered successful.',
       metrics: [
         { id: 'm1', label: 'Spend', target: 100, values: {} },
         { id: 'm2', label: 'CTR ad group 1', target: 100, values: {} },
@@ -204,7 +200,6 @@ function seedPaidConversions() {
     {
       id: 'pc-seo',
       title: 'SEO/AEO',
-      note: 'This is to support organic growth within the company through search engine and AI engine optimization. It can be further enhanced by LinkedIn posting, as well as Reddit and the newsletter, since AEO pulls from those.',
       metrics: [
         { id: 'm1', label: '# of Blogs Posted', note: 'Having many blogs helps with AEO, since that’s what AI pulls from.', target: 150, values: {} },
         { id: 'm2', label: 'CTR', note: 'Since this is the metric we pay most based on, we want this as low as possible while keeping CVR as high as possible.', target: null, values: {} },
@@ -218,7 +213,6 @@ function seedPaidConversions() {
     {
       id: 'pc-claude-skill',
       title: 'Claude Skill for Posting (LinkedIn and X)',
-      note: 'This is a set of ten standardized post templates for LinkedIn and X, so branding takes off while requiring less of the team’s time to continuously post on social media to build the brand.',
       metrics: [
         { id: 'm1', label: 'Profiles Connected', target: 5, values: {} },
         { id: 'm2', label: 'Number of Posts', target: 5, values: {} },
@@ -231,7 +225,6 @@ function seedPaidConversions() {
     {
       id: 'pc-reddit',
       title: 'Reddit',
-      note: 'We have a screen on Reddit that flags any posts related to the value we add or the problems we solve for. That way, someone on the team can reply and guide the conversation toward a demo call. Replies need to be from a real person, as Reddit has very strong defenses against bots.',
       metrics: [
         { id: 'm1', label: 'Number of Posts', target: '50-100', values: {} },
         { id: 'm2', label: '# Likes', target: 20, values: {} },
@@ -243,7 +236,6 @@ function seedPaidConversions() {
     {
       id: 'pc-newsletter',
       title: 'Newsletter Features',
-      note: 'This is to support our AEO by bringing visibility across platforms and many different websites that are not necessarily linked to the main ElevenLabs page, which increases the chances of our name being pulled into AI search results.',
       metrics: [
         { id: 'm1', label: 'Number of Posts', target: 1, values: {} },
         { id: 'm2', label: 'Audience demographic', target: 'Researchers, Founders, Lab Directors', values: {} },
@@ -255,7 +247,6 @@ function seedPaidConversions() {
     {
       id: 'pc-daily-summary',
       title: 'Daily Summary',
-      note: 'The idea is that all booked meetings, regardless of type, should convert at roughly the same rate. This summary tracks that conversion rate from meeting booked to the next stage.',
       metrics: [
         { id: 'm1', label: 'Spend', target: 'Under $100', values: {} },
         { id: 'm2', label: '# Meeting Booked', target: 53, values: {} },
@@ -461,7 +452,7 @@ export function seedData() {
       roadmap: 'Roadmap section: This allows the team to visualize timelines and deadlines for projects and tasks. It will also help coordinate timelines for multi-team projects. Each task in the roadmap can house information. The dependent and depending tasks in the roadmap will be set to flag conflicts.\n\nOKRs section: This will help keep vision on the end goals as a team. This will also make sure that the team is aligned and can be used as a reference throughout projects.\n\nCalendar section: This will allow the team to view the major dates to consider, such as launches, conferences, and testing. The calendar can also be adjusted to view the team schedule or a person’s schedule with the checkboxes underneath. It will also notify the team of upcoming dates as relevant.',
       metrics: 'This page houses all of the metrics each team assigns itself, all visible in one view. This keeps everyone focused on the goal, or target, they need to hit, and how they are progressing toward it. It gives a single summary view of what is going on across every team and how each is tracking against its own benchmarks.',
       operations: 'This page shows all team milestones as well as each teammate’s capacity. It also includes team composition, so any changes in a project or shifts in direction can be easily assigned to a teammate who has the capacity for it. Anyone newly onboarded can see who is working on what, what everyone’s capacity looks like, and who they can reach out to for support at any given time.',
-      paidConversions: 'All channels are designed to lead to a booked meeting, and then go more granular into demo, pricing negotiation, and sales.',
+      paidConversions: 'All channels are designed to lead to a booked meeting, and then go more granular into demo, pricing negotiation, and sales.\n\nEmail Outbound: This is a campaign to reach out to targets, tracking the funnel from leads and emails sent, to number of replies, to meetings booked. From there, we go more granular into demos, pricing negotiations, and sales.\n\nAds - LinkedIn: These are campaigns on LinkedIn Ads run against specific audience lists, to see whether we are presenting the ad to the right people and whether they are present on LinkedIn. If this channel does not bring a positive CAC, it will be deemed unsuccessful.\n\nAds - Google: These are Google Search ads to make sure we are optimizing for what our ICP is looking for and hitting the right messaging. It needs to produce a positive CAC to be considered successful.\n\nSEO/AEO: This is to support organic growth within the company through search engine and AI engine optimization. It can be further enhanced by LinkedIn posting, as well as Reddit and the newsletter, since AEO pulls from those.\n\nClaude Skill for Posting (LinkedIn and X): This is a set of ten standardized post templates for LinkedIn and X, so branding takes off while requiring less of the team’s time to continuously post on social media to build the brand.\n\nReddit: We have a screen on Reddit that flags any posts related to the value we add or the problems we solve for. That way, someone on the team can reply and guide the conversation toward a demo call. Replies need to be from a real person, as Reddit has very strong defenses against bots.\n\nNewsletter Features: This is to support our AEO by bringing visibility across platforms and many different websites that are not necessarily linked to the main ElevenLabs page, which increases the chances of our name being pulled into AI search results.\n\nDaily Summary: The idea is that all booked meetings, regardless of type, should convert at roughly the same rate. This summary tracks that conversion rate from meeting booked to the next stage.',
     },
     tasks: seedTasks(),
   };
