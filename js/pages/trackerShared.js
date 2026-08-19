@@ -1,12 +1,14 @@
 import { commit } from '../store.js';
 import { uid, escapeHtml } from '../utils.js';
 import { openClubSidebar } from '../clubSidebar.js';
+import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
 
 export function renderTrackerPage(container, data, key, opts) {
   const sections = data[key];
   const weeks = data.weeks;
 
   container.innerHTML = `
+    ${notesBoxHtml(key)}
     <div class="toolbar">
       <div class="page-title" style="margin:0;">${escapeHtml(opts.title)}</div>
       <button class="btn btn-primary" id="add-section-btn">+ Section</button>
@@ -20,6 +22,7 @@ export function renderTrackerPage(container, data, key, opts) {
   `;
 
   document.getElementById('tracker-sections').innerHTML = sections.map((s) => renderSection(s, weeks)).join('');
+  wireNotesBox(key);
 
   const sectionForm = document.getElementById('add-section-form');
   const sectionInput = document.getElementById('add-section-input');

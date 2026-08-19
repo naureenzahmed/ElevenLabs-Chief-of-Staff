@@ -1,11 +1,13 @@
 import { getData, commit } from '../store.js';
 import { uid, escapeHtml } from '../utils.js';
+import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
 
 export function renderDocumentation(container) {
   const data = getData();
   const sections = data.docs;
 
   container.innerHTML = `
+    ${notesBoxHtml('documentation')}
     <div class="toolbar">
       <div class="page-title" style="margin:0;">Documentation &amp; SOPs</div>
       <button class="btn btn-primary" id="add-doc-section-btn">+ Section</button>
@@ -19,6 +21,7 @@ export function renderDocumentation(container) {
   `;
 
   document.getElementById('doc-sections').innerHTML = sections.map(renderSection).join('');
+  wireNotesBox('documentation');
 
   const sectionForm = document.getElementById('add-doc-section-form');
   const sectionInput = document.getElementById('add-doc-section-input');

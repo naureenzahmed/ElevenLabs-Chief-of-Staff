@@ -426,12 +426,14 @@ a.doc-title:hover { text-decoration: underline; }
 .doc-fields-table th, .doc-fields-table td { white-space: nowrap; }
 
 .leads-table th, .leads-table td { white-space: nowrap; }
-.leads-notes {
+.notes-box {
   width: 100%; min-height: 90px; background: var(--bg-raised); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 12px; color: var(--text); font-size: 13px;
   outline: none; resize: vertical; font-family: inherit; margin-top: 8px;
 }
-.leads-notes:focus { border-color: #b8b6b2; }
+.notes-box:focus { border-color: #b8b6b2; }
+.page-notes-wrap { margin-bottom: 24px; }
+.page-notes-wrap .notes-box { margin-top: 6px; min-height: 80px; }
 
 /* ---------- Deadline calendar ---------- */
 .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }

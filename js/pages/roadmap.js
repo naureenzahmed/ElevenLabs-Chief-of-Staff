@@ -3,6 +3,7 @@ import { uid, todayISO, addDays, daysBetween, fmtDate, escapeHtml, initials } fr
 import { openTaskSidebar } from '../taskSidebar.js';
 import { renderOkrSection } from './okr.js';
 import { renderDeadlineCalendar } from './deadlineCalendar.js';
+import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
 
 const DAY_PX = 18;
 const DAYS_BEFORE = 21;
@@ -17,6 +18,7 @@ export function renderRoadmap(container) {
   const data = getData();
 
   container.innerHTML = `
+    ${notesBoxHtml('roadmap')}
     <div class="goal-banner" id="roadmap-timeline-section">
       <div class="goal-title-row">
         <div class="goal-icon"><svg fill="currentColor" viewBox="0 0 9.194 14.752" aria-hidden="true"><path d="M0 0h3.079v14.752H0zM6.115 0h3.079v14.752H6.115z"></path></svg></div>
@@ -47,6 +49,8 @@ export function renderRoadmap(container) {
       <div id="roadmap-calendar-section"></div>
     </div>
   `;
+
+  wireNotesBox('roadmap');
 
   container.querySelectorAll('[data-view]').forEach((btn) => {
     btn.addEventListener('click', () => { currentView = btn.dataset.view; renderRoadmap(container); });

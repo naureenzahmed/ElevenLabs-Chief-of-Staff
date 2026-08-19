@@ -449,6 +449,7 @@ export function seedData() {
     recruitment: seedRecruitment(),
     docs: seedDocs(),
     inboundLeads: seedInboundLeads(),
+    pageNotes: {},
     tasks: seedTasks(),
   };
 }
