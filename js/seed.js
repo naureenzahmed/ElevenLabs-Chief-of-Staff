@@ -393,7 +393,6 @@ function seedDocs() {
       ],
       entries: [],
     },
-    { id: 'docs-tmu', title: 'TMU Documentation', entries: [] },
     {
       id: 'docs-tofu', title: 'Top-of-Funnel',
       entries: [
@@ -421,6 +420,7 @@ function seedDocs() {
         { id: 'ops-doc-3', title: 'Onboarding checklist', url: '', notes: '' },
       ],
     },
+    { id: 'docs-eng', title: 'Eng Processes and Documentation', entries: [] },
   ];
 }
 
@@ -449,7 +449,9 @@ export function seedData() {
     recruitment: seedRecruitment(),
     docs: seedDocs(),
     inboundLeads: seedInboundLeads(),
-    pageNotes: {},
+    pageNotes: {
+      documentation: 'All documentation, processes, SOPs, and links will live here. This allows for easy access for all team members and will reduce any dependencies on individuals. Additionally, this will facilitate future onboarding, as new hires can go through all of these documents. Access to particular documents can be adjusted as needed. Anytime a new process or system is created, we will have Claude and Whisper Flow document the process to capture the exact steps.',
+    },
     tasks: seedTasks(),
   };
 }
