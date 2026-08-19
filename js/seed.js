@@ -430,7 +430,10 @@ function seedInboundLeads() {
     positiveAnswer: '', demoBookedDate: '', demoHappenedDate: '', lostLead: '',
     meetingWithAeDate: '', estimatedQuantity: '', estimatedRevenue: '', note: '',
   });
-  return { rows: [emptyRow(), emptyRow(), emptyRow(), emptyRow(), emptyRow()], notes: '' };
+  return {
+    rows: [emptyRow(), emptyRow(), emptyRow(), emptyRow(), emptyRow()],
+    notes: 'This page holds all of the leads so they can be consolidated like a CRM. It will be automated with calendars, flags, and emails. This can also connect to HubSpot, which tracks all emails, calendar events, and other communication with each lead. This page consolidates all leads into a single view of what is going on.',
+  };
 }
 
 export function seedData() {
@@ -453,6 +456,8 @@ export function seedData() {
     pageNotes: {
       documentation: 'All documentation, processes, SOPs, and links will live here. This allows for easy access for all team members and will reduce any dependencies on individuals. Additionally, this will facilitate future onboarding, as new hires can go through all of these documents. Access to particular documents can be adjusted as needed. Anytime a new process or system is created, we will have Claude and Whisper Flow document the process to capture the exact steps.',
       roadmap: 'Roadmap section: This allows the team to visualize timelines and deadlines for projects and tasks. It will also help coordinate timelines for multi-team projects. Each task in the roadmap can house information. The dependent and depending tasks in the roadmap will be set to flag conflicts.\n\nOKRs section: This will help keep vision on the end goals as a team. This will also make sure that the team is aligned and can be used as a reference throughout projects.\n\nCalendar section: This will allow the team to view the major dates to consider, such as launches, conferences, and testing. The calendar can also be adjusted to view the team schedule or a person’s schedule with the checkboxes underneath. It will also notify the team of upcoming dates as relevant.',
+      metrics: 'This page houses all of the metrics each team assigns itself, all visible in one view. This keeps everyone focused on the goal, or target, they need to hit, and how they are progressing toward it. It gives a single summary view of what is going on across every team and how each is tracking against its own benchmarks.',
+      operations: 'This page shows all team milestones as well as each teammate’s capacity. It also includes team composition, so any changes in a project or shifts in direction can be easily assigned to a teammate who has the capacity for it. Anyone newly onboarded can see who is working on what, what everyone’s capacity looks like, and who they can reach out to for support at any given time.',
     },
     tasks: seedTasks(),
   };
