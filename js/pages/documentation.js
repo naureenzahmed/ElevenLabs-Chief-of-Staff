@@ -1,6 +1,6 @@
 import { getData, commit } from '../store.js';
 import { uid, escapeHtml } from '../utils.js';
-import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
+import { notesBoxHtml } from '../notesBox.js';
 
 export function renderDocumentation(container) {
   const data = getData();
@@ -21,7 +21,6 @@ export function renderDocumentation(container) {
   `;
 
   document.getElementById('doc-sections').innerHTML = sections.map(renderSection).join('');
-  wireNotesBox('documentation');
 
   const sectionForm = document.getElementById('add-doc-section-form');
   const sectionInput = document.getElementById('add-doc-section-input');

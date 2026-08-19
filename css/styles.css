@@ -432,6 +432,8 @@ a.doc-title:hover { text-decoration: underline; }
   outline: none; resize: vertical; font-family: inherit; margin-top: 8px;
 }
 .notes-box:focus { border-color: #b8b6b2; }
+.notes-box[readonly] { cursor: default; color: var(--text-dim); }
+.notes-box[readonly]:focus { border-color: var(--border); }
 .page-notes-wrap { margin-bottom: 24px; }
 .page-notes-wrap .notes-box { margin-top: 6px; min-height: 80px; }
 

@@ -28,7 +28,7 @@ export function renderInboundLeads(container) {
   container.innerHTML = `
     <div class="page-notes-wrap">
       <div class="section-label">Notes</div>
-      <textarea id="leads-notes" class="notes-box" placeholder="General notes...">${escapeHtml(tracker.notes || '')}</textarea>
+      <textarea id="leads-notes" class="notes-box" readonly placeholder="No notes yet.">${escapeHtml(tracker.notes || '')}</textarea>
     </div>
     <div class="toolbar">
       <div class="page-title" style="margin:0;">Inbound Leads</div>
@@ -45,12 +45,6 @@ export function renderInboundLeads(container) {
     tracker.rows.push(emptyRow());
     commit();
     renderInboundLeads(container);
-  });
-
-  const notesEl = document.getElementById('leads-notes');
-  notesEl.addEventListener('input', () => {
-    tracker.notes = notesEl.value;
-    commit();
   });
 }
 

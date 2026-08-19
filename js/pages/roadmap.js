@@ -3,7 +3,7 @@ import { uid, todayISO, addDays, daysBetween, fmtDate, escapeHtml, initials } fr
 import { openTaskSidebar } from '../taskSidebar.js';
 import { renderOkrSection } from './okr.js';
 import { renderDeadlineCalendar } from './deadlineCalendar.js';
-import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
+import { notesBoxHtml } from '../notesBox.js';
 
 const DAY_PX = 18;
 const DAYS_BEFORE = 21;
@@ -49,8 +49,6 @@ export function renderRoadmap(container) {
       <div id="roadmap-calendar-section"></div>
     </div>
   `;
-
-  wireNotesBox('roadmap');
 
   container.querySelectorAll('[data-view]').forEach((btn) => {
     btn.addEventListener('click', () => { currentView = btn.dataset.view; renderRoadmap(container); });
