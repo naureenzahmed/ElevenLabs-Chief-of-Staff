@@ -1,11 +1,13 @@
 import { getData, commit, findTeam } from '../store.js';
 import { uid, clamp, escapeHtml } from '../utils.js';
+import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
 
 export function renderMetrics(container) {
   const data = getData();
   const pct = data.companyGoal.target ? clamp(Math.round((data.companyGoal.current / data.companyGoal.target) * 100), 0, 100) : 0;
 
   container.innerHTML = `
+    ${notesBoxHtml('metrics')}
     <div class="card" id="goal-card-top" style="cursor:pointer; margin-bottom:24px;">
       <div class="section-label">Company goal</div>
       <div class="goal-big" style="margin:6px 0;">${escapeHtml(data.companyGoal.title)}</div>
@@ -32,6 +34,8 @@ export function renderMetrics(container) {
       <div class="grid-3" id="metric-cards"></div>
     </div>
   `;
+
+  wireNotesBox('metrics');
 
   document.getElementById('goal-card-top').addEventListener('click', () => {
     const current = Number(prompt('Current value', data.companyGoal.current));

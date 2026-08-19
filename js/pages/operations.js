@@ -1,10 +1,12 @@
 import { getData, commit, findTeam } from '../store.js';
 import { uid, todayISO, fmtDate, relativeDay, initials, escapeHtml } from '../utils.js';
+import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
 
 export function renderOperations(container) {
   const data = getData();
 
   container.innerHTML = `
+    ${notesBoxHtml('operations')}
     <div class="page-title">Team Management</div>
 
     <div id="ops-milestones">
@@ -32,6 +34,7 @@ export function renderOperations(container) {
     </div>
   `;
 
+  wireNotesBox('operations');
   renderMilestones(data);
   renderAvailability(data);
   renderTeams(data);

@@ -38,14 +38,6 @@ function buildManifest(data) {
       ],
     },
     {
-      key: 'operations', label: 'Team Management',
-      subsections: [
-        { id: 'ops-milestones', label: 'Key Milestones' },
-        { id: 'ops-availability', label: 'Availability' },
-        { id: 'ops-teams', label: 'Team Composition' },
-      ],
-    },
-    {
       key: 'metrics', label: 'Metrics',
       subsections: [
         { id: 'metrics-log', label: 'Monthly Log' },
@@ -57,6 +49,14 @@ function buildManifest(data) {
       subsections: data.paidConversions.filter((s) => !s.isIntro).map((s) => ({ id: s.id, label: s.title })),
     },
     { key: 'inboundLeads', label: 'Inbound Leads', subsections: [] },
+    {
+      key: 'operations', label: 'Team Management',
+      subsections: [
+        { id: 'ops-milestones', label: 'Key Milestones' },
+        { id: 'ops-availability', label: 'Availability' },
+        { id: 'ops-teams', label: 'Team Composition' },
+      ],
+    },
     {
       key: 'recruitment', label: 'Recruitment',
       subsections: data.recruitment.filter((s) => !s.isIntro).map((s) => ({ id: s.id, label: s.title })),

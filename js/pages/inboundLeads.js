@@ -26,6 +26,10 @@ export function renderInboundLeads(container) {
   const tracker = data.inboundLeads;
 
   container.innerHTML = `
+    <div class="page-notes-wrap">
+      <div class="section-label">Notes</div>
+      <textarea id="leads-notes" class="notes-box" placeholder="General notes...">${escapeHtml(tracker.notes || '')}</textarea>
+    </div>
     <div class="toolbar">
       <div class="page-title" style="margin:0;">Inbound Leads</div>
       <button class="btn btn-primary" id="add-lead-btn">+ Add lead</button>
@@ -33,8 +37,6 @@ export function renderInboundLeads(container) {
     <div class="card" style="overflow-x:auto;">
       <table class="list-table leads-table" id="leads-table"></table>
     </div>
-    <div class="section-label" style="margin-top:20px;">Notes</div>
-    <textarea id="leads-notes" class="leads-notes" placeholder="General notes...">${escapeHtml(tracker.notes || '')}</textarea>
   `;
 
   renderTable(tracker, container);
