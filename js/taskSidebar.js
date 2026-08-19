@@ -1,5 +1,6 @@
 import { getData, commit, findTask, findPerson } from './store.js';
 import { uid, fmtDate, initials, colorForName, escapeHtml } from './utils.js';
+import { notifySlack } from './slackNotify.js';
 
 const STATUS_OPTIONS = ['No status', 'Backlog', 'Ready', 'In progress', 'In design', 'Committed', 'Done'];
 
@@ -15,6 +16,22 @@ export function closeTaskSidebar() {
   if (onCloseCallback) onCloseCallback();
 }
 
+function computeConflicts(task, allTasks) {
+  const conflicts = [];
+  (task.blockedBy || []).forEach((bid) => {
+    const blocker = allTasks.find((t) => t.id === bid);
+    if (blocker && blocker.endDate > task.startDate) {
+      conflicts.push(`Starts before its dependency “${blocker.title}” finishes (${fmtDate(blocker.endDate)})`);
+    }
+  });
+  allTasks.forEach((t) => {
+    if ((t.blockedBy || []).includes(task.id) && task.endDate > t.startDate) {
+      conflicts.push(`“${t.title}” depends on this but starts before it finishes (${fmtDate(t.startDate)})`);
+    }
+  });
+  return conflicts;
+}
+
 function render(taskId) {
   const task = findTask(taskId);
   const root = document.getElementById('sidebar-root');
@@ -22,6 +39,14 @@ function render(taskId) {
 
   const data = getData();
   const needsInfo = !task.description?.trim() || !task.impact?.trim();
+  const dependingTasks = data.tasks.filter((t) => (t.blockedBy || []).includes(task.id));
+  const conflicts = computeConflicts(task, data.tasks);
+  const conflictingBlockerIds = new Set(
+    (task.blockedBy || []).filter((bid) => {
+      const blocker = findTask(bid);
+      return blocker && blocker.endDate > task.startDate;
+    })
+  );
 
   root.innerHTML = `
     <div class="sidebar-overlay" id="ts-overlay"></div>
@@ -36,6 +61,14 @@ function render(taskId) {
         <input class="ts-title-input" id="ts-title" value="${escapeHtml(task.title)}" placeholder="Task title" />
 
         ${needsInfo ? `<div class="ts-warning">Add a description and an impact before marking this task complete.</div>` : ''}
+        ${conflicts.length ? `
+          <div class="ts-conflict">
+            <b>Scheduling conflict${conflicts.length > 1 ? 's' : ''}</b>
+            <ul style="margin:4px 0 0; padding-left:16px;">
+              ${conflicts.map((c) => `<li>${escapeHtml(c)}</li>`).join('')}
+            </ul>
+          </div>
+        ` : ''}
 
         <div class="ts-field">
           <div class="ts-field-label">Description · Required</div>
@@ -105,15 +138,23 @@ function render(taskId) {
         </div>
 
         <div class="ts-field">
-          <div class="ts-field-label">Blocked by</div>
+          <div class="ts-field-label">Blocked by (depends on)</div>
           <div id="ts-blockers">
             ${task.blockedBy.map((bid) => {
               const bt = findTask(bid);
-              return bt ? `<span class="ts-chip">${escapeHtml(bt.title)}<button data-remove-blocker="${bid}">✕</button></span>` : '';
-            }).join('')}
+              const conflictClass = conflictingBlockerIds.has(bid) ? ' ts-chip-conflict' : '';
+              return bt ? `<span class="ts-chip${conflictClass}">${escapeHtml(bt.title)}<button data-remove-blocker="${bid}">✕</button></span>` : '';
+            }).join('') || '<span class="empty-hint" style="padding:0;">None</span>'}
           </div>
           <button class="btn btn-ghost" id="ts-add-blocker" style="margin-top:6px; padding: 4px 8px;">+ Add dependency</button>
           <select id="ts-blocker-select" style="display:none; margin-top:6px;"></select>
+        </div>
+
+        <div class="ts-field">
+          <div class="ts-field-label">Depending tasks</div>
+          <div id="ts-dependents">
+            ${dependingTasks.map((t) => `<span class="ts-chip">${escapeHtml(t.title)}</span>`).join('') || '<span class="empty-hint" style="padding:0;">Nothing depends on this yet</span>'}
+          </div>
         </div>
 
         <div class="ts-field">
@@ -158,6 +199,12 @@ function render(taskId) {
   wireEvents(task);
 }
 
+function notifyConflictsIfAny(task, conflicts) {
+  if (conflicts.length) {
+    notifySlack(`⚠️ Conflict on task "${task.title}": ${conflicts[0]}${conflicts.length > 1 ? ` (+${conflicts.length - 1} more)` : ''}`);
+  }
+}
+
 function wireEvents(task) {
   const data = getData();
   const close = () => closeTaskSidebar();
@@ -165,10 +212,12 @@ function wireEvents(task) {
   document.getElementById('ts-overlay').addEventListener('click', close);
   document.getElementById('ts-close').addEventListener('click', close);
 
-  const field = (id, key, transform = (v) => v) => {
+  const field = (id, key, label, { transform = (v) => v, checkConflicts = false } = {}) => {
     document.getElementById(id).addEventListener('change', (e) => {
       task[key] = transform(e.target.value);
       commit();
+      notifySlack(`Task "${task.title}" updated — ${label} changed.`);
+      if (checkConflicts) notifyConflictsIfAny(task, computeConflicts(task, data.tasks));
       if (onCloseCallback) onCloseCallback();
       render(task.id);
     });
@@ -185,13 +234,13 @@ function wireEvents(task) {
   liveField('ts-description', 'description');
   liveField('ts-impact', 'impact');
   liveField('ts-client', 'client');
-  field('ts-status', 'status');
-  field('ts-assignee', 'assigneeId', (v) => v || null);
-  field('ts-start', 'startDate');
-  field('ts-end', 'endDate');
-  field('ts-design-deadline', 'designDeadline');
-  field('ts-section', 'sectionId');
-  field('ts-team', 'teamId');
+  field('ts-status', 'status', 'status');
+  field('ts-assignee', 'assigneeId', 'assignee', { transform: (v) => v || null });
+  field('ts-start', 'startDate', 'start date', { checkConflicts: true });
+  field('ts-end', 'endDate', 'end date', { checkConflicts: true });
+  field('ts-design-deadline', 'designDeadline', 'design deadline');
+  field('ts-section', 'sectionId', 'section');
+  field('ts-team', 'teamId', 'team');
 
   document.getElementById('ts-complete').addEventListener('click', () => {
     if (!task.description?.trim() || !task.impact?.trim()) {
@@ -200,6 +249,7 @@ function wireEvents(task) {
     }
     task.status = task.status === 'Done' ? 'In progress' : 'Done';
     commit();
+    notifySlack(`Task "${task.title}" marked ${task.status === 'Done' ? 'complete' : 'incomplete'}.`);
     if (onCloseCallback) onCloseCallback();
     render(task.id);
   });
@@ -209,6 +259,7 @@ function wireEvents(task) {
     const idx = data.tasks.findIndex((t) => t.id === task.id);
     if (idx >= 0) data.tasks.splice(idx, 1);
     commit();
+    notifySlack(`Task "${task.title}" deleted.`);
     closeTaskSidebar();
   });
 
@@ -230,6 +281,9 @@ function wireEvents(task) {
       if (select.value) {
         task.blockedBy.push(select.value);
         commit();
+        const newConflicts = computeConflicts(task, data.tasks);
+        notifySlack(`Task "${task.title}" now depends on "${findTask(select.value).title}".`);
+        notifyConflictsIfAny(task, newConflicts);
         render(task.id);
       }
     };

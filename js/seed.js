@@ -126,7 +126,7 @@ function seedMetrics() {
 function seedOkrs() {
   return [
     {
-      id: 'okr-company', objective: 'Company Objective 1', teamId: null,
+      id: 'okr-company', objective: 'Sector Objective 1', teamId: null,
       keyResults: [
         { id: 'kr-co-1', title: 'Key result 1', current: 0, target: 100, deadline: addDays(todayISO(), 90), assigneeIds: [] },
         { id: 'kr-co-2', title: 'Key result 2', current: 0, target: 100, deadline: addDays(todayISO(), 60), assigneeIds: [] },
@@ -393,7 +393,6 @@ function seedDocs() {
       ],
       entries: [],
     },
-    { id: 'docs-tmu', title: 'TMU Documentation', entries: [] },
     {
       id: 'docs-tofu', title: 'Top-of-Funnel',
       entries: [
@@ -421,6 +420,7 @@ function seedDocs() {
         { id: 'ops-doc-3', title: 'Onboarding checklist', url: '', notes: '' },
       ],
     },
+    { id: 'docs-eng', title: 'Eng Processes and Documentation', entries: [] },
   ];
 }
 
@@ -449,7 +449,11 @@ export function seedData() {
     recruitment: seedRecruitment(),
     docs: seedDocs(),
     inboundLeads: seedInboundLeads(),
-    pageNotes: {},
+    slackWebhookUrl: '',
+    pageNotes: {
+      documentation: 'All documentation, processes, SOPs, and links will live here. This allows for easy access for all team members and will reduce any dependencies on individuals. Additionally, this will facilitate future onboarding, as new hires can go through all of these documents. Access to particular documents can be adjusted as needed. Anytime a new process or system is created, we will have Claude and Whisper Flow document the process to capture the exact steps.',
+      roadmap: 'Roadmap section: This allows the team to visualize timelines and deadlines for projects and tasks. It will also help coordinate timelines for multi-team projects. Each task in the roadmap can house information. The dependent and depending tasks in the roadmap will be set to flag conflicts.\n\nOKRs section: This will help keep vision on the end goals as a team. This will also make sure that the team is aligned and can be used as a reference throughout projects.\n\nDeadline calendar section: This will allow the team to view the major dates to consider, such as launches, conferences, and testing. The calendar can also be adjusted to view the team schedule or a person’s schedule with the checkboxes on the side. It will also notify the team of upcoming dates as relevant.',
+    },
     tasks: seedTasks(),
   };
 }

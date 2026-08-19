@@ -1,6 +1,6 @@
 import { getData, commit, findTeam } from '../store.js';
 import { uid, todayISO, fmtDate, relativeDay, initials, escapeHtml } from '../utils.js';
-import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
+import { notesBoxHtml } from '../notesBox.js';
 
 export function renderOperations(container) {
   const data = getData();
@@ -34,7 +34,6 @@ export function renderOperations(container) {
     </div>
   `;
 
-  wireNotesBox('operations');
   renderMilestones(data);
   renderAvailability(data);
   renderTeams(data);

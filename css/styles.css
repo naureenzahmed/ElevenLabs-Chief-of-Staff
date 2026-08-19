@@ -227,6 +227,7 @@ a { color: inherit; }
 }
 .tl-bar:hover { filter: brightness(1.1); }
 .tl-bar .status-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(0,0,0,0.45); flex-shrink: 0; }
+.tl-bar-conflict { border: 2px solid var(--red); box-shadow: 0 0 0 1px rgba(220,38,38,0.25); }
 
 /* ---------- List / Board views ---------- */
 .view-tabs { display: flex; gap: 4px; }
@@ -360,6 +361,10 @@ table.metrics-table tr.metrics-group-row .team-dot { display: inline-block; marg
   background: var(--warning-bg); border: 1px solid var(--warning-border); color: var(--warning-text);
   padding: 8px 10px; border-radius: 8px; font-size: 12px; margin-bottom: 14px;
 }
+.ts-conflict {
+  background: rgba(220,38,38,0.07); border: 1px solid rgba(220,38,38,0.3); color: var(--red);
+  padding: 8px 10px; border-radius: 8px; font-size: 12px; margin-bottom: 14px;
+}
 .ts-field { padding: 10px 0; border-bottom: 1px solid var(--border); }
 .ts-field-label {
   display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; font-weight: 600;
@@ -379,6 +384,7 @@ table.metrics-table tr.metrics-group-row .team-dot { display: inline-block; marg
   border: 1px solid var(--border); border-radius: 20px; padding: 3px 8px 3px 4px; font-size: 12px; margin: 3px 4px 0 0;
 }
 .ts-chip button { border: none; background: transparent; color: var(--text-faint); cursor: pointer; font-size: 13px; line-height: 1; padding: 0; }
+.ts-chip-conflict { background: rgba(220,38,38,0.08); border-color: rgba(220,38,38,0.35); color: var(--red); }
 .ts-subtask-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 13px; }
 .ts-subtask-row input[type=checkbox] { accent-color: var(--accent); }
 .ts-comment { padding: 8px 0; border-top: 1px solid var(--border); font-size: 13px; }
@@ -432,10 +438,12 @@ a.doc-title:hover { text-decoration: underline; }
   outline: none; resize: vertical; font-family: inherit; margin-top: 8px;
 }
 .notes-box:focus { border-color: #b8b6b2; }
+.notes-box[readonly] { cursor: default; color: var(--text-dim); }
+.notes-box[readonly]:focus { border-color: var(--border); }
 .page-notes-wrap { margin-bottom: 24px; }
 .page-notes-wrap .notes-box { margin-top: 6px; min-height: 80px; }
 
-/* ---------- Deadline calendar ---------- */
+/* ---------- Calendar ---------- */
 .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .cal-header select {
   background: var(--bg-raised-2); border: 1px solid var(--border); border-radius: 7px;
@@ -464,6 +472,23 @@ a.doc-title:hover { text-decoration: underline; }
 .cal-more { display: block; font-size: 10px; color: var(--text-faint); }
 .cal-legend { display: flex; gap: 16px; font-size: 12px; color: var(--text-dim); margin-top: 12px; }
 .cal-legend span { display: inline-flex; align-items: center; gap: 5px; }
+
+.cal-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+@media (max-width: 700px) { .cal-filters { grid-template-columns: 1fr; } }
+.cal-checkbox-row {
+  display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 0;
+  cursor: pointer; color: var(--text);
+}
+.cal-checkbox-row input[type=checkbox] { accent-color: var(--accent); }
+.cal-filter-team-group { margin-bottom: 12px; }
+.cal-filter-team-group:last-child { margin-bottom: 0; }
+.cal-filter-team-label {
+  display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700;
+  color: var(--text-dim); margin: 8px 0 2px;
+}
+.cal-filter-team-group:first-child .cal-filter-team-label { margin-top: 0; }
+.cal-filter-team-label .team-dot { flex-shrink: 0; }
+.cal-filter-col .cal-checkbox-row { padding-left: 4px; }
 
 /* ---------- Tracker pages (Paid Conversions / Recruitment) ---------- */
 .page-intro { color: var(--text-dim); font-size: 13px; line-height: 1.6; }

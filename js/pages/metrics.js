@@ -1,6 +1,6 @@
 import { getData, commit, findTeam } from '../store.js';
 import { uid, clamp, escapeHtml } from '../utils.js';
-import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
+import { notesBoxHtml } from '../notesBox.js';
 
 export function renderMetrics(container) {
   const data = getData();
@@ -34,8 +34,6 @@ export function renderMetrics(container) {
       <div class="grid-3" id="metric-cards"></div>
     </div>
   `;
-
-  wireNotesBox('metrics');
 
   document.getElementById('goal-card-top').addEventListener('click', () => {
     const current = Number(prompt('Current value', data.companyGoal.current));

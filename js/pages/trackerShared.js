@@ -1,7 +1,7 @@
 import { commit } from '../store.js';
 import { uid, escapeHtml } from '../utils.js';
 import { openClubSidebar } from '../clubSidebar.js';
-import { notesBoxHtml, wireNotesBox } from '../notesBox.js';
+import { notesBoxHtml } from '../notesBox.js';
 
 export function renderTrackerPage(container, data, key, opts) {
   const sections = data[key];
@@ -22,7 +22,6 @@ export function renderTrackerPage(container, data, key, opts) {
   `;
 
   document.getElementById('tracker-sections').innerHTML = sections.map((s) => renderSection(s, weeks)).join('');
-  wireNotesBox(key);
 
   const sectionForm = document.getElementById('add-section-form');
   const sectionInput = document.getElementById('add-section-input');
