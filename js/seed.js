@@ -451,6 +451,7 @@ export function seedData() {
     inboundLeads: seedInboundLeads(),
     pageNotes: {
       documentation: 'All documentation, processes, SOPs, and links will live here. This allows for easy access for all team members and will reduce any dependencies on individuals. Additionally, this will facilitate future onboarding, as new hires can go through all of these documents. Access to particular documents can be adjusted as needed. Anytime a new process or system is created, we will have Claude and Whisper Flow document the process to capture the exact steps.',
+      roadmap: 'Roadmap section: This allows the team to visualize timelines and deadlines for projects and tasks. It will also help coordinate timelines for multi-team projects. Each task in the roadmap can house information. The dependent and depending tasks in the roadmap will be set to flag conflicts.\n\nOKRs section: This will help keep vision on the end goals as a team. This will also make sure that the team is aligned and can be used as a reference throughout projects.\n\nDeadline calendar section: This will allow the team to view the major dates to consider, such as launches, conferences, and testing. The calendar can also be adjusted to view the team schedule or a person’s schedule with the checkboxes on the side. It will also notify the team of upcoming dates as relevant.',
     },
     tasks: seedTasks(),
   };
