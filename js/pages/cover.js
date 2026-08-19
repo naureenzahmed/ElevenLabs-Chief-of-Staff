@@ -34,7 +34,7 @@ function buildManifest(data) {
       subsections: [
         { id: 'roadmap-timeline-section', label: 'Timeline / List / Board' },
         { id: 'roadmap-okr-section', label: 'OKRs' },
-        { id: 'roadmap-calendar-section', label: 'Deadline Calendar' },
+        { id: 'roadmap-calendar-section', label: 'Calendar' },
       ],
     },
     {

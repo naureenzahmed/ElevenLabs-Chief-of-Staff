@@ -5,7 +5,7 @@ export function renderOkrSection(container) {
   const data = getData();
 
   const groups = [
-    { teamId: null, label: 'Company Goals', color: null },
+    { teamId: null, label: 'Sector Objectives', color: null },
     ...data.teams.map((t) => ({ teamId: t.id, label: t.name, color: t.color })),
   ];
 

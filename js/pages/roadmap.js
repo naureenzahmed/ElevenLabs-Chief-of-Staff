@@ -4,6 +4,7 @@ import { openTaskSidebar } from '../taskSidebar.js';
 import { renderOkrSection } from './okr.js';
 import { renderDeadlineCalendar } from './deadlineCalendar.js';
 import { notesBoxHtml } from '../notesBox.js';
+import { getSlackWebhookUrl, setSlackWebhookUrl } from '../slackNotify.js';
 
 const DAY_PX = 18;
 const DAYS_BEFORE = 21;
@@ -37,7 +38,15 @@ export function renderRoadmap(container) {
       <div class="view-tabs" id="view-tabs">
         ${['timeline', 'list', 'board'].map((v) => `<button class="view-tab ${v === currentView ? 'active' : ''}" data-view="${v}">${cap(v)}</button>`).join('')}
       </div>
-      <button class="btn btn-primary" id="add-task-btn">+ Task</button>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-ghost" id="slack-settings-btn">🔔 Slack</button>
+        <button class="btn btn-primary" id="add-task-btn">+ Task</button>
+      </div>
+    </div>
+    <div class="inline-add-form" id="slack-settings-form" style="display:none;">
+      <input type="text" id="slack-webhook-input" placeholder="Slack Incoming Webhook URL" value="${escapeHtml(getSlackWebhookUrl())}" style="max-width:420px;" />
+      <button class="btn btn-primary" id="slack-webhook-save">Save</button>
+      <button class="btn btn-ghost" id="slack-settings-cancel">Cancel</button>
     </div>
 
     <div id="roadmap-view"></div>
@@ -45,7 +54,7 @@ export function renderRoadmap(container) {
     <div id="roadmap-okr-section" style="margin-top: 40px;"></div>
 
     <div style="margin-top: 40px;">
-      <div class="page-title" style="margin-bottom: 12px;">Deadline calendar</div>
+      <div class="page-title" style="margin-bottom: 12px;">Calendar</div>
       <div id="roadmap-calendar-section"></div>
     </div>
   `;
@@ -56,6 +65,20 @@ export function renderRoadmap(container) {
 
   document.getElementById('add-task-btn').addEventListener('click', () => {
     addTask(data.initiatives[0]?.id);
+  });
+
+  const slackForm = document.getElementById('slack-settings-form');
+  const slackInput = document.getElementById('slack-webhook-input');
+  document.getElementById('slack-settings-btn').addEventListener('click', () => {
+    slackForm.style.display = slackForm.style.display === 'none' ? 'flex' : 'none';
+    if (slackForm.style.display === 'flex') slackInput.focus();
+  });
+  document.getElementById('slack-settings-cancel').addEventListener('click', () => {
+    slackForm.style.display = 'none';
+  });
+  document.getElementById('slack-webhook-save').addEventListener('click', () => {
+    setSlackWebhookUrl(slackInput.value);
+    slackForm.style.display = 'none';
   });
 
   const view = document.getElementById('roadmap-view');
@@ -130,6 +153,15 @@ function renderTimeline(view, data) {
   });
 }
 
+function taskHasConflict(task, allTasks) {
+  const startsBeforeBlockerFinishes = (task.blockedBy || []).some((bid) => {
+    const blocker = allTasks.find((t) => t.id === bid);
+    return blocker && blocker.endDate > task.startDate;
+  });
+  const dependentStartsBeforeThisFinishes = allTasks.some((t) => (t.blockedBy || []).includes(task.id) && task.endDate > t.startDate);
+  return startsBeforeBlockerFinishes || dependentStartsBeforeThisFinishes;
+}
+
 function renderInitiativeRow(init, data, timelineStart, laneWidth, weekPx, todayLeft) {
   const team = findTeam(init.teamId);
   const tasks = data.tasks.filter((t) => t.sectionId === init.id);
@@ -139,9 +171,10 @@ function renderInitiativeRow(init, data, timelineStart, laneWidth, weekPx, today
     const left = daysBetween(timelineStart, t.startDate) * DAY_PX;
     const width = Math.max((daysBetween(t.startDate, t.endDate) + 1) * DAY_PX, DAY_PX * 3);
     const color = team?.color || 'var(--accent)';
+    const conflict = taskHasConflict(t, data.tasks);
     return `
-      <div class="tl-bar" data-task-bar="${t.id}" style="left:${left}px; width:${width}px; background:${color};" title="${escapeHtml(t.title)}">
-        <span class="status-dot"></span>${escapeHtml(t.title)}
+      <div class="tl-bar ${conflict ? 'tl-bar-conflict' : ''}" data-task-bar="${t.id}" style="left:${left}px; width:${width}px; background:${color};" title="${escapeHtml(t.title)}${conflict ? ' — scheduling conflict' : ''}">
+        <span class="status-dot"></span>${escapeHtml(t.title)}${conflict ? ' ⚠' : ''}
       </div>
     `;
   }).join('');
