@@ -301,7 +301,6 @@ function seedRecruitment() {
       entities: [
         { name: 'Socratica Symposium', links: [] },
         { name: 'GenAI Genesis', links: [] },
-        { name: 'TreeHacks', links: [] },
         { name: 'Hack the North', links: [] },
         { name: 'MILA ALL-IN', links: [] },
       ],
