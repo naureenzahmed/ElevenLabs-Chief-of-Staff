@@ -209,7 +209,7 @@ function seedPaidConversions() {
       metrics: [
         { id: 'm1', label: 'Profiles Connected', target: 5, values: {} },
         { id: 'm2', label: 'Number of Posts', target: 5, values: {} },
-        { id: 'm3', label: 'Post Type', note: 'Announcement, Statistic, Custom, Culture...', target: null, values: {} },
+        { id: 'm3', label: 'Post Type', note: 'Announcement, Statistic, Change in the Market, Company Culture...', target: null, values: {} },
         { id: 'm4', label: 'Likes', target: 400, values: {} },
         { id: 'm5', label: 'Comments', target: 50, values: {} },
         { id: 'm6', label: 'CTR', target: '20%', values: {} },
