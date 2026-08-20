@@ -156,7 +156,7 @@ function seedPaidConversions() {
       id: 'pc-email',
       title: 'Email Outbound',
       metrics: [
-        { id: 'm1', label: 'Number of leads', note: 'Reaching them through their email would be the best, with editorial and case studies.', target: 100, values: {} },
+        { id: 'm1', label: 'Number of leads', note: 'This would act as an easy way to book the call and would act as a mechanism to reinforce our credibility with case studies.', target: 100, values: {} },
         { id: 'm2', label: 'Number of emails', target: 80, values: {} },
         { id: 'm3', label: 'Number of replies', target: 16, values: {} },
         { id: 'm4', label: '# Meeting Booked', target: 4, values: {} },
