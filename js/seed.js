@@ -298,7 +298,6 @@ function seedRecruitment() {
     {
       id: 'rec-attendance',
       title: 'Event Attendance',
-      note: 'Simply attending these events will help bring visibility to ElevenLabs as well as act as a recruitment channel.',
       entities: [
         { name: 'Socratica Symposium', links: [] },
         { name: 'GenAI Genesis', links: [] },
