@@ -245,6 +245,15 @@ function seedPaidConversions() {
         { id: 'm2', label: '# Meeting Booked', target: 53, values: {} },
       ],
     },
+    {
+      id: 'pc-funnel',
+      title: 'Demo, Pricing & Sales',
+      metrics: [
+        { id: 'm1', label: 'Demo Calls Booked', target: null, values: {} },
+        { id: 'm2', label: 'Pricing Negotiations', target: null, values: {} },
+        { id: 'm3', label: 'Sales', target: null, values: {} },
+      ],
+    },
   ];
 }
 
