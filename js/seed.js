@@ -231,7 +231,7 @@ function seedPaidConversions() {
       title: 'Newsletter Features',
       metrics: [
         { id: 'm1', label: 'Number of Posts', target: 1, values: {} },
-        { id: 'm2', label: 'Audience demographic', target: 'Researchers, Founders, Lab Directors', values: {} },
+        { id: 'm2', label: 'Audience demographic', target: 'Engineer Lead, Head of Product, Product Managers, Engineers, Developers...', values: {} },
         { id: 'm3', label: 'Number of views', target: 200, values: {} },
         { id: 'm4', label: '# Replies', target: 50, values: {} },
         { id: 'm5', label: '# Meeting Booked', target: 10, values: {} },
